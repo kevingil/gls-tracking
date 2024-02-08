@@ -1,9 +1,26 @@
 import Image from "next/image";
+import AccountNav from "./components/AccountNav"
+
+
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
+    <div className="w-full h-max">
+      
+      <div className="text-white bg-[#124280] p-4">
       <p className="text-3xl">GLS Tracking</p>
-    </main>
+      </div>
+
+      <div className="flex h-full w-full flex-row text-black">
+        <AccountNav />
+         
+        <div className="w-full h-full">
+        <p className="text-2xl">Shipments</p>
+
+        </div>
+
+      </div>
+
+    </div>
   );
 }
