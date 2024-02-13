@@ -1,0 +1,53 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+:root {
+    --bg: #ffffff;
+    --text: #151515;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+}
+
+.main {
+    background: linear-gradient(to top, #230c66 0%, #170942 10%,#080013 20%, #05000e 100%);  
+    background-repeat: no-repeat;
+    
+    position: relative;
+    min-height: 100vh;
+}
+
+nav.account-nav > div > div {
+    padding: 1rem;
+}
+
+
+@layer utilities {
+    .text-balance {
+      text-wrap: balance;
+    }
+  }

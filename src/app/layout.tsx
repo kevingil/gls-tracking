@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "./styles/main.css";
 
 require('dotenv').config();
 
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <main className="{inter.className} min-h-screen bg-white text-black">{children}</main>
+       {children}
     </html>
   );
 }

@@ -1,21 +1,21 @@
 import Link from 'next/link';
 
-function Nav() {
+function AccountNav() {
   return (
-    <nav className='bg-gray-50 h-full'>
-      <ul>
-        <li>
+    <nav className='account-nav bg-gray-50 h-full'>
+      <div className='flex flex-col gap-4'>
+        <div>
           Todays Shipments 
-        </li>
-        <li>
+        </div>
+        <div>
           Track Shipment
-        </li>
-        <li>
+        </div>
+        <div>
           Find
-        </li>
-      </ul>
+        </div>
+      </div>
     </nav>
   );
 };
 
-export default Nav;
+export default AccountNav;
