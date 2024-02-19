@@ -1,13 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { fetchToken, trackShipment, Shipment, Token, TransitNote } from '../api/gls';
+import { fetchToken, trackShipment, TrackingResponse } from '../api/gls';
 
 interface PackagesProps {
     shipmentDate: string;
 }
 
 const Packages = ({ shipmentDate }: PackagesProps) => {
-    const [shipments, setShipments] = useState<Shipment[]>([]);
+
+    const [shipments, setShipments] = useState<TrackingResponse['ShipmentInfo']>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -17,14 +18,14 @@ const Packages = ({ shipmentDate }: PackagesProps) => {
                 const username = process.env.NEXT_PUBLIC_GLS_USERNAME!;
                 const password = process.env.NEXT_PUBLIC_GLS_PASSWORD!;
                 const accountNumber = process.env.NEXT_PUBLIC_GLS_ACCOUNTNUMBER!;
+
                 // Fetch token
                 const tokenResponse = await fetchToken(host, password, username);
                 const token = tokenResponse.token;
 
                 // Fetch shipments
                 const shipmentResponse = await trackShipment(host, accountNumber, shipmentDate, token);
-                //This is wrong, use for now
-                const data = shipmentResponse;
+                const data = shipmentResponse.ShipmentInfo;
 
                 setShipments(data);
                 setError(null);
@@ -44,9 +45,9 @@ const Packages = ({ shipmentDate }: PackagesProps) => {
                 <p>{error}</p>
             ) : (
                 <div>
-                    {shipments.map((shipment) => (
-                        <div key={shipment.TrackingNumber}>
-                            <p>Tracking Number: {shipment.TrackingNumber}</p>
+                    {shipments.map((shipment, index) => (
+                        <div key={index} className="border border-gray-200 p-4 mb-4">
+                            <p className="font-semibold">Tracking Number: {shipment.TrackingNumber}</p>
                         </div>
                     ))}
                 </div>
@@ -55,4 +56,5 @@ const Packages = ({ shipmentDate }: PackagesProps) => {
     );
 };
 
+// Export Packages component
 export default Packages;

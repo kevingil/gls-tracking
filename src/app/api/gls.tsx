@@ -6,6 +6,10 @@ export type Token = {
     expirationTime: number;
 }
 
+export type TrackingResponse = {
+    ShipmentInfo: Shipment[];
+}
+
 export type Shipment = {
     TrackingNumber: string;
     TotalCharge: number;
@@ -44,8 +48,8 @@ async function fetchToken(h: string, p: string, u: string): Promise<Token> {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Username': p,
-                'Password': u
+                'Username': u,
+                'Password': p
             }
         });
         if (!response.ok) {
@@ -70,19 +74,20 @@ async function fetchToken(h: string, p: string, u: string): Promise<Token> {
     }
 }
 
-async function trackShipment(h: string, acctnum: string, shipmentDate: string, token: string): Promise<Shipment[]> {
+async function trackShipment(h: string, acctnum: string, shipmentDate: string, token: string): Promise<TrackingResponse> {
     try {
         const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}&ShipDate=${shipmentDate}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Token': token
             }
         });
         if (!response.ok) {
+            console.log(response);
             throw new Error('Failed to fetch shipment');
         }
-        const data: Shipment[] = await response.json();
+        const data: TrackingResponse = await response.json();
         return data;
     } catch (error) {
         console.error('Error fetching shipment:', error);
