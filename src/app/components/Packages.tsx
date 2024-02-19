@@ -1,9 +1,9 @@
 'use client';
 
+import { hostname } from 'os';
 import { useEffect, useState } from 'react';
-import { GLS_APIURL, GLS_ACCOUNTNUMBER, GLS_USERNAME, GLS_PASSWORD } from '../api/api';
 
-export type Recipient = {
+type Recipient = {
   ShipToCompany: string;
   ShipToAttention: string;
   ShipToPhone: string;
@@ -15,7 +15,7 @@ export type Recipient = {
   Shipments: Shipment[];
 }
 
-export type Shipment = {
+type Shipment = {
   TrackingNumber: string;
   TotalCharge: number;
   ShipDate: string;
@@ -56,35 +56,62 @@ type Token = {
 }
 
 const Packages = ({ shipmentDate }: PackagesProps) => {
+
+    const username = process.env.NEXT_PUBLIC_GLS_USERNAME;
+    const password = process.env.NEXT_PUBLIC_GLS_PASSWORD;
+    const accountNumber = process.env.NEXT_PUBLIC_GLS_ACCOUNTNUMBER;
+    const host = process.env.NEXT_PUBLIC_GLS_HOST;
+
     const [shipments, setShipments] = useState<Shipment[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
 
+    useEffect(() => {
         const fetchShipments = async () => {
-            try {
-                if (!shipmentDate) {
-                    setError('Shipment date is required.');
+            let token: Token | null = getTokenFromLocalStorage();
+    
+            if (!shipmentDate) {
+                setError('Shipment date is required.');
+                return;
+            }
+    
+            if (!token || isTokenExpired(token)) {
+                if (username && password) {
+                    try {
+                        token = await fetchToken(username, password);
+                        if (token) {
+                            saveTokenToLocalStorage(token.token, 12 * 60 * 60);
+                        } else {
+                            throw new Error('Error prasing token.');
+                        }
+                    } catch (error) {
+                        setError('Error fetching token');
+                        console.error('Error fetching token: ', error);
+                        return;
+                    }
+                } else {
+                    setError('Username and password are required.');
                     return;
                 }
-
-                let token: Token | null = getTokenFromLocalStorage();
-                if (!token || isTokenExpired(token)) {
-                    token = await fetchToken();
-                    saveTokenToLocalStorage(token.token, 12 * 60 * 60);
+            }
+    
+            try {
+                if (token && token.token) {
+                    const data = await TrackShipment(shipmentDate, token.token);
+                    setShipments([data]);
+                    setError(null);
+                } else {
+                    throw new Error('Invalid token.');
                 }
-
-                const data = await TrackShipment(shipmentDate, token.token);
-                setShipments([data]);
-                setError(null);
             } catch (error) {
-                setError('Error fetching GLS data');
-                console.error('Error fetching GLS data:', error);
+                setError('Error tracking shipment');
+                console.error('Error tracking shipment: ', error);
             }
         };
-
+    
         fetchShipments();
-    }, [shipmentDate]); 
+    }, [shipmentDate]);
+    
 
     function getTokenFromLocalStorage(): Token | null {
         const tokenData = JSON.parse(localStorage.getItem('gls_token') || 'null');
@@ -101,14 +128,15 @@ const Packages = ({ shipmentDate }: PackagesProps) => {
     }
 
     // Fetch the token
-    async function fetchToken(): Promise<Token> {
-        console.log("Fetch token: " + GLS_APIURL);
+    async function fetchToken(p: string, u: string): Promise<Token> {
+        console.log("Fetch token: " + process.env.NEXT_PUBLIC_GLS_HOST);
         try {
-            const response = await fetch(`${GLS_APIURL}/token`, {
+            const response = await fetch(`https://${host}/token`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Basic ${btoa(`${GLS_USERNAME}:${GLS_PASSWORD}`)}`
+                    'Username': p,
+                    'Password': u
                 }
             });
             if (!response.ok) {
@@ -133,11 +161,12 @@ const Packages = ({ shipmentDate }: PackagesProps) => {
     }
 
 
+
     // Track shipment
     async function TrackShipment(shipmentDate: string, token: string): Promise<Shipment> {
         console.log("Track shipment");
         try {
-            const response = await fetch(`${GLS_APIURL}/TrackShipment?AccountNumber=${GLS_ACCOUNTNUMBER}&ShipDate=${shipmentDate}`, {
+            const response = await fetch(`https://${process.env.NEXT_PUBLIC_GLS_HOST}/TrackShipment?AccountNumber=${process.env.NEXT_PUBLIC_GLS_ACCOUNTNUMBER}&ShipDate=${shipmentDate}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
