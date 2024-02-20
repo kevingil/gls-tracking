@@ -4,6 +4,13 @@
 Data visibility dashboard for GLS-US shipping customers. Helps you easily find and browse shipments.
 
 
+# Demo
+
+Find by date, grouped by reference
+
+<img src="screenshot.png">
+
+
 ### Develop
 
 You will need your GLS API credentials

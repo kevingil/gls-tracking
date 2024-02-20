@@ -163,7 +163,7 @@ const Packages = ({ selectedDay, onReferenceClick, onShipmentDateChange }: Packa
                                             <p className='text-slate-500 text-sm font-semibold'>Packages</p>
                                         </>
                                     )}
-                                    <p><a className='text-blue-500 hover:text-blue-700' href={`https://gls-us.com/track-and-trace?TrackingNumbers=${shipment.TrackingNumber}`}>{shipment.TrackingNumber}</a></p>
+                                    <p>{shipment.TrackingNumber}</p>
                                 </div>
                             ))}
                         </div>
