@@ -1,10 +1,7 @@
 
 ## GLS Tracking
 
-Data visibility dashboard for GLS shipping
-
-
-Dashboard for GLS-US users to find shipments by customer, reference, date, etc.
+Data visibility dashboard for GLS-US shipping customers. Helps you easily find and browse shipments.
 
 
 ### Develop
