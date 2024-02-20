@@ -15,7 +15,8 @@ TODO
 
 
 ```bash
-#.env example
+#.env example for development
+
 NEXT_PUBLIC_GLS_HOST=api.gls-us.com/Rest/v1
 NEXT_PUBLIC_GLS_ACCOUNTNUMBER=your_number
 NEXT_PUBLIC_GLS_USERNAME=your_username

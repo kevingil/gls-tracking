@@ -1,12 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { fetchToken, trackShipment, TrackingResponse, Shipment } from '../api/gls';
+import { fetchToken, trackByDate, TrackingResponse, Shipment } from '../api/gls';
 
 interface PackagesProps {
     shipmentDate: string;
+    onReferenceClick: (reference: string) => void;
 }
 
-const Packages = ({ shipmentDate }: PackagesProps) => {
+const Packages = ({ shipmentDate, onReferenceClick }: PackagesProps) => {
 
     const [shipments, setShipments] = useState<TrackingResponse['ShipmentInfo']>([]);
     const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,7 @@ const Packages = ({ shipmentDate }: PackagesProps) => {
                 const token = tokenResponse.token;
 
                 // Fetch shipments
-                const shipmentResponse = await trackShipment(host, accountNumber, shipmentDate, token);
+                const shipmentResponse = await trackByDate(host, accountNumber, token, shipmentDate);
                 const data = shipmentResponse.ShipmentInfo;
 
                 setShipments(data);
@@ -48,20 +49,20 @@ const Packages = ({ shipmentDate }: PackagesProps) => {
 
     return (
         <div>
-            <p className="text-2xl font-semibold p-4">GLS Shipments</p>
             {error ? (
                 <p>{error}</p>
             ) : (
                 <div>
                     {Object.entries(shipmentsByReference).map(([reference, shipments]) => (
-                        <div key={reference} className="border border-gray-200 p-4 mb-4">
+                        <div key={reference} 
+                            className="border border-gray-200 p-4 mb-4"
+                            onClick={() => onReferenceClick(reference)}>
                             <p className='font-semibold font-2xl'>PO: {reference}</p>
                             {shipments.map((shipment, index) => (
                                 <div key={index}>
                                     {index === 0 && (
                                         <>
                                             <p>Customer: {shipment.ShipToCompany}</p>
-                                            {/* Add other customer details if needed */}
                                         </>
                                     )}
                                     <p>Tracking Number: <a className='text-blue-500 hover:text-blue-700' href={`https://gls-us.com/track-and-trace?TrackingNumbers=${shipment.TrackingNumber}`}>{shipment.TrackingNumber}</a></p>

@@ -2,13 +2,13 @@
 
 function AccountNav() {
   return (
-    <nav className='account-nav bg-gray-50 h-full'>
-      <div className='flex flex-col gap-4'>
+    <nav className='account-nav h-full'>
+      <div className='flex flex-col gap-4 w-full h-full'>
         <div>
-          Todays Shipments 
+          Recent Shipments
         </div>
         <div>
-          Track Shipment
+          Find Shipments
         </div>
         <div>
           Find

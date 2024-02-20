@@ -7,7 +7,7 @@ require('dotenv').config();
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MacPac Tracking"
+  title: "Shipment Dashboard"
 };
 
 export default function RootLayout({

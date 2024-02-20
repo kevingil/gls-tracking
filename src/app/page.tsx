@@ -1,5 +1,8 @@
-import AccountNav from "../app/components/AccountNav"
-import Packages from "../app/components/Packages"
+'use client';
+import React, { useState } from 'react';
+import AccountNav from "../app/components/AccountNav";
+import Packages from "../app/components/Packages";
+import ReferenceDetail from "../app/components/ReferenceDetail";
 
 function getPreviousBusinessDay() {
   const date = new Date();
@@ -24,17 +27,34 @@ function getPreviousBusinessDay() {
 
 export default function Home() {
   const previousBusinessDay = getPreviousBusinessDay(); 
+  const [selectedReference, setSelectedReference] = useState<string | null>(null);
+
+  const handleReferenceClick = (reference: string) => {
+    setSelectedReference(reference);
+  };
+
   return (
-      <div className="w-full h-full">
-          <div className="text-white bg-[#124280] p-4">
-              <p className="text-3xl">Track</p>
-          </div>
-          <div className="flex flex-row flex-grow text-black">
-              <AccountNav />
-              <div className="w-full h-full">
-                  <Packages shipmentDate={previousBusinessDay} />
-              </div>
-          </div>
+    <div className="w-full h-full">
+      <div className="text-white bg-[#124280] p-4">
+        <p className="text-3xl">GLS Tracking Dashboard</p>
       </div>
+      <div>
+        <p className="text-2xl font-semibold p-4">Shipments</p>
+      </div>
+      <div className="flex flex-row gap-2 px-2 flex-grow text-black">
+        <div className='w-full h-full max-w-[15rem]'>
+            <AccountNav />
+        </div>
+        <div className="w-full h-full max-w-[25rem]">
+          <Packages 
+            shipmentDate={previousBusinessDay} 
+            onReferenceClick={handleReferenceClick}
+          />
+        </div>
+        <div className="w-full">
+        <ReferenceDetail date={previousBusinessDay} reference={selectedReference}/>
+        </div>
+      </div>
+    </div>
   );
 }

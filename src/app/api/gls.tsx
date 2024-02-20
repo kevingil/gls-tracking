@@ -1,5 +1,4 @@
 'use server';
-import { NextApiRequest, NextApiResponse } from 'next';
 
 export type Token = {
     token: string;
@@ -112,7 +111,7 @@ async function fetchToken(h: string, p: string, u: string): Promise<Token> {
     }
 }
 
-async function trackShipment(h: string, acctnum: string, shipmentDate: string, token: string): Promise<TrackingResponse> {
+async function trackByDate(h: string, acctnum: string, token: string, shipmentDate: string): Promise<TrackingResponse> {
     try {
         const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}&ShipDate=${shipmentDate}`, {
             method: 'GET',
@@ -133,4 +132,26 @@ async function trackShipment(h: string, acctnum: string, shipmentDate: string, t
     }
 }
 
-export { fetchToken, trackShipment};
+async function trackByReference(h: string, acctnum: string, token: string, reference: string): Promise<TrackingResponse> {
+    try {
+        const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}&ReferenceNumber=${reference}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': token
+            }
+        });
+        if (!response.ok) {
+            console.log(response);
+            throw new Error('Failed to fetch shipment');
+        }
+        const data: TrackingResponse = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching shipment:', error);
+        throw new Error('Error fetching shipment');
+    }
+}
+
+
+export { fetchToken, trackByDate, trackByReference};
