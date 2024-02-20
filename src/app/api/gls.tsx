@@ -5,34 +5,64 @@ export type Token = {
     token: string;
     expirationTime: number;
 }
-
 export type TrackingResponse = {
     ShipmentInfo: Shipment[];
-}
+    StatusCode: number;
+    StatusDescription: string;
+    AuthenticationResultCode: number;
+    RequestDateTime: string;
+    ResponseDateTime: string;
+    ErrorCount: number;
+    ErrorDetail: any; 
+};
 
 export type Shipment = {
+    AccountNumber: number;
     TrackingNumber: string;
-    TotalCharge: number;
-    ShipDate: string;
+    ShipperCompany: string;
+    ShipperContact: string;
+    ShipperPhone: string;
+    ShipperEmail: string;
+    PickupAddress1: string;
+    PickupAddress2: string;
+    PickupCity: string;
+    PickupState: string;
+    PickupZip: string;
+    ShipToCompany: string;
+    ShipToAttention: string;
+    ShipToPhone: string;
+    ShipToEmail: string;
+    DeliveryAddress1: string;
+    DeliveryAddress2: string;
+    DeliveryCity: string;
+    DeliveryState: string;
+    DeliveryZip: string;
+    DeliveryZone: number;
     ServiceCode: string;
     ShipmentReference: string;
-    DeclaredValue: string;
-    CODValue: string;
+    DeclaredValue: number;
+    CODValue: number;
     SpecialInstructions: string;
-    Weight: string;
+    Weight: number;
     SignatureCode: string;
     AddnShipperReference1: string;
     AddnShipperReference2: string;
     PODImage: string;
     PODImageMessage: string;
+    Delivery: DeliveryInfo;
+    TransitNotes: TransitNote[];
+    ShipmentCharges: ShipmentCharges;
+};
+
+export type DeliveryInfo = {
+    ShipDate: string;
     ScheduledDeliveryDate: string;
     ScheduledDeliveryTime: string;
     DeliveryDate: string;
     TransitStatus: string;
     DeliveryTime: string;
     SignedBy: string;
-    Signature: string;
-    TransitNotes: TransitNote[];
+    Signature: string | null; 
 };
 
 export type TransitNote = {
@@ -41,6 +71,14 @@ export type TransitNote = {
     Location: string;
 };
 
+export type ShipmentCharges = {
+    TransportationCharge: number;
+    CODCharge: number;
+    InsuranceCharge: number;
+    FuelSurcharge: number;
+    OtherCharge: any[]; 
+    TotalCharge: number;
+};
 
 async function fetchToken(h: string, p: string, u: string): Promise<Token> {
     try {

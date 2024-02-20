@@ -27,7 +27,7 @@ export default function Home() {
   return (
       <div className="w-full h-full">
           <div className="text-white bg-[#124280] p-4">
-              <p className="text-3xl">GLS Tracking</p>
+              <p className="text-3xl">Track</p>
           </div>
           <div className="flex flex-row flex-grow text-black">
               <AccountNav />

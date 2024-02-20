@@ -7,8 +7,7 @@ require('dotenv').config();
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GLS Tracking",
-  description: "Tracking for GLS",
+  title: "MacPac Tracking"
 };
 
 export default function RootLayout({
