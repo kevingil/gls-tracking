@@ -47,8 +47,8 @@ const ReferenceDetail: React.FC<ReferenceDetailProps> = ({ date, reference }) =>
                     <p className='px-2 text-5xl tracking-tighter'>PO {reference}</p>
                     {shipments.length > 0 && (
                         <div className='flex flex-row p-2 gap-4'>
-                            <div>
-                                <p>Customer: </p>
+                            <div className='mb-2'>
+                                <p className='text-md text-slate-700 font-semibold mb-2 px-2'>Shipped {date} </p>
                                 <p className='font-bold'>{shipments[0].ShipToCompany}</p>
                                 <p>{shipments[0].ShipToAttention}</p>
                                 <p>{shipments[0].ShipToPhone}</p>
@@ -61,7 +61,7 @@ const ReferenceDetail: React.FC<ReferenceDetailProps> = ({ date, reference }) =>
                     )}
                     {shipments.map((shipment, index) => (
                         <div key={index} className='border border-gray-200 p-2' >
-                            <p className='text-lg pb-1'>Tracking: {shipment.TrackingNumber} </p>
+                            <p className='text-lg pb-1'>Tracking: <a className='text-blue-500 hover:text-blue-700' target='_blank' href={`https://gls-us.com/track-and-trace?TrackingNumbers=${shipment.TrackingNumber}`}>{shipment.TrackingNumber}</a></p>
                            <div className='flex flex-row gap-6 pb-1'>
                                 <div className=''>
                                     <p>Status: {shipment.Delivery.TransitStatus}</p>
@@ -79,7 +79,7 @@ const ReferenceDetail: React.FC<ReferenceDetailProps> = ({ date, reference }) =>
                             </div>
                             <ul className='p-2 bg-gray-100 rounded'>
                                 {shipment.TransitNotes.map((note, idx) => (
-                                    <li key={idx}>{note.Comments}</li>
+                                    <li key={idx}><span className='font-semibold'>{note.EventDate} @ {note.Location}</span><br></br><span className='pb-2'>{note.Comments}</span></li>
                                 ))}
                             </ul>
                         </div>

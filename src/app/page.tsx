@@ -26,11 +26,20 @@ function getPreviousBusinessDay() {
 }
 
 export default function Home() {
-  const previousBusinessDay = getPreviousBusinessDay();
   const [selectedReference, setSelectedReference] = useState<string | null>(null);
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const previousBusinessDay = getPreviousBusinessDay();
+
+  if (!selectedDay) {
+    setSelectedDay(previousBusinessDay);
+  }
 
   const handleReferenceClick = (reference: string) => {
     setSelectedReference(reference);
+  };
+
+  const handleDayChange = (newDate: string) => {
+    setSelectedDay(newDate);
   };
 
   return (
@@ -44,8 +53,9 @@ export default function Home() {
         </div>
         <div className="w-[25rem] overflow-auto">
           <Packages
-            shipmentDate={previousBusinessDay}
+            selectedDay={selectedDay}
             onReferenceClick={handleReferenceClick}
+            onShipmentDateChange={handleDayChange}
           />
         </div>
         <div className="flex-1 overflow-auto">
