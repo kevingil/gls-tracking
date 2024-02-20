@@ -90,7 +90,6 @@ async function fetchToken(h: string, p: string, u: string): Promise<Token> {
             }
         });
         if (!response.ok) {
-            console.log(response);
             throw new Error('Failed to fetch token');
         }
 
@@ -106,8 +105,7 @@ async function fetchToken(h: string, p: string, u: string): Promise<Token> {
             expirationTime: expirationTime
         };
     } catch (error) {
-        console.error('Error fetching token:', error);
-        throw new Error('Error fetching token');
+        throw new Error('Could not fetch token');
     }
 }
 

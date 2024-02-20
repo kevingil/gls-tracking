@@ -8,9 +8,6 @@ function AccountNav() {
           Recent Shipments
         </div>
         <div>
-          Find Shipments
-        </div>
-        <div>
           Find
         </div>
       </div>

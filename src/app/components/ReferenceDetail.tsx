@@ -1,5 +1,3 @@
-// ReferenceDetail.tsx
-
 import React, { useEffect, useState } from 'react';
 import { fetchToken, trackByReference, Shipment } from '../api/gls';
 
@@ -45,43 +43,45 @@ const ReferenceDetail: React.FC<ReferenceDetailProps> = ({ date, reference }) =>
                 <p className='p-4'>{error}</p>
             ) : (
                 <div className="border border-gray-200 p-4 mb-4">
-                    <p className="font-semibold font-2xl">Shipment Details for Reference: {reference}</p>
-
+                    <p className="font-semibold font-2xl">Shipment Detail</p>
+                    <p className='px-2 text-5xl tracking-tighter'>PO {reference}</p>
+                    {shipments.length > 0 && (
+                        <div className='flex flex-row p-2 gap-4'>
+                            <div>
+                                <p>Customer: </p>
+                                <p className='font-bold'>{shipments[0].ShipToCompany}</p>
+                                <p>{shipments[0].ShipToAttention}</p>
+                                <p>{shipments[0].ShipToPhone}</p>
+                                <p>{shipments[0].ShipToEmail}</p>
+                                <p>{shipments[0].DeliveryAddress1}</p>
+                                <p>{shipments[0].DeliveryAddress2}</p>
+                                <p>{shipments[0].DeliveryCity}, {shipments[0].DeliveryState} {shipments[0].DeliveryZip}</p>
+                            </div>
+                        </div>
+                    )}
                     {shipments.map((shipment, index) => (
-                        <div key={index} >
-                            <div className='flex flex-row p-2 gap-4'>
-                                <div>
-                                    <p>Ship To: </p>
-                                    <p>{shipment.ShipToCompany}</p>
-                                    <p>{shipment.ShipToAttention}</p>
-                                    <p>{shipment.ShipToPhone}</p>
-                                    <p>{shipment.ShipToEmail}</p>
-                                    <p>{shipment.DeliveryAddress1}</p>
-                                    <p>{shipment.DeliveryAddress2}</p>
-                                    <p>{shipment.DeliveryCity}, {shipment.DeliveryState} {shipment.DeliveryZip}</p>
-                                    <p>Service: {shipment.ServiceCode}</p>
-                                    <p>Declared Value: {shipment.DeclaredValue}</p>
-                                    <p>COD Value: {shipment.CODValue}</p>
-                                    <p>Special Instructions: {shipment.SpecialInstructions}</p>
-                                </div>
+                        <div key={index} className='border border-gray-200 p-2' >
+                            <p className='text-lg pb-1'>Tracking: {shipment.TrackingNumber} </p>
+                           <div className='flex flex-row gap-6 pb-1'>
                                 <div className=''>
+                                    <p>Status: {shipment.Delivery.TransitStatus}</p>
+                                    <p>Shipment Charges: {shipment.ShipmentCharges.TotalCharge}</p>
+                                    <p>Service: {shipment.ServiceCode}</p>
                                     <p>Weight: {shipment.Weight}</p>
                                     <p>Signature Code: {shipment.SignatureCode}</p>
+                                </div>
+                                <div className=''>
                                     <p>POD Image: {shipment.PODImage}</p>
                                     <p>POD Image Message: {shipment.PODImageMessage}</p>
                                     <p>Delivery Date: {shipment.Delivery.DeliveryDate}</p>
-                                    <p>Transit Status: {shipment.Delivery.TransitStatus}</p>
                                     <p>Signed By: {shipment.Delivery.SignedBy}</p>
                                 </div>
                             </div>
-                            
-                            <p>Transit Notes:</p>
                             <ul className='p-2 bg-gray-100 rounded'>
                                 {shipment.TransitNotes.map((note, idx) => (
                                     <li key={idx}>{note.Comments}</li>
                                 ))}
                             </ul>
-                            <p>Shipment Charges: {shipment.ShipmentCharges.TotalCharge}</p>
                         </div>
                     ))}
                 </div>

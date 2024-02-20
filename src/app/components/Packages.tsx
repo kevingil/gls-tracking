@@ -55,17 +55,18 @@ const Packages = ({ shipmentDate, onReferenceClick }: PackagesProps) => {
                 <div>
                     {Object.entries(shipmentsByReference).map(([reference, shipments]) => (
                         <div key={reference} 
-                            className="border border-gray-200 p-4 mb-4"
+                            className="border border-gray-200 p-4"
                             onClick={() => onReferenceClick(reference)}>
-                            <p className='font-semibold font-2xl'>PO: {reference}</p>
+                            <p className='font-semibold font-2xl'>ORDER# {reference}</p>
                             {shipments.map((shipment, index) => (
                                 <div key={index}>
                                     {index === 0 && (
                                         <>
-                                            <p>Customer: {shipment.ShipToCompany}</p>
+                                            <p>{shipment.ShipToCompany}</p>
+                                            <p>Boxes:</p>
                                         </>
                                     )}
-                                    <p>Tracking Number: <a className='text-blue-500 hover:text-blue-700' href={`https://gls-us.com/track-and-trace?TrackingNumbers=${shipment.TrackingNumber}`}>{shipment.TrackingNumber}</a></p>
+                                    <p><a className='text-blue-500 hover:text-blue-700' href={`https://gls-us.com/track-and-trace?TrackingNumbers=${shipment.TrackingNumber}`}>{shipment.TrackingNumber}</a></p>
                                 </div>
                             ))}
                         </div>
