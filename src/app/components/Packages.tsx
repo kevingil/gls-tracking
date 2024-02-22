@@ -77,14 +77,14 @@ const Packages = ({ selectedDay, onReferenceClick, onShipmentDateChange }: Packa
             ) : (
                 <div>
                     <div className="border border-gray-200 p-4">
-                        Ship Date {selectedDay}
-                        <div className="flex items-center justify-end">
+                        Ship Date 
+                        <div className="flex items-center">
                             <button
                                 type="button"
                                 onClick={openModal}
-                                className="rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                                className="rounded-md w-full p-2 m-2 bg-black/70 px-4 py-2 text-md font-medium text-white hover:bg-black/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
                             >
-                                Change
+                                {selectedDay}
                             </button>
                         </div>
 
