@@ -79,6 +79,17 @@ export type ShipmentCharges = {
     TotalCharge: number;
 };
 
+export type Filter = {
+    searchTerm: string;
+    date: string;
+    all: boolean;
+    intransit: boolean;
+    late: boolean;
+    exception: boolean;
+    delivered: boolean;
+}
+
+
 async function fetchToken(h: string, p: string, u: string): Promise<Token> {
     try {
         const response = await fetch(`https://${h}/token`, {

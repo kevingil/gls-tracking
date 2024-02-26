@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import AccountNav from "../app/components/AccountNav";
+import Search from "./components/Search";
 import Packages from "../app/components/Packages";
 import ReferenceDetail from "../app/components/ReferenceDetail";
 
@@ -44,13 +44,8 @@ export default function Home() {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="text-white bg-[#124280] p-4">
-        <p className="text-3xl">GLS Tracking Dashboard</p>
-      </div>
-      <div className="flex flex-1 overflow-y-scroll">
-        <div className='w-[14rem] h-full overflow-auto'>
-          <AccountNav />
-        </div>
+      <Search/>
+      <div className="flex flex-1 mx-auto  w-full  max-w-7xl overflow-y-scroll">
         <div className="w-[25rem] overflow-auto">
           <Packages
             selectedDay={selectedDay}
@@ -58,10 +53,11 @@ export default function Home() {
             onShipmentDateChange={handleDayChange}
           />
         </div>
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 w-full overflow-auto">
           <ReferenceDetail date={previousBusinessDay} reference={selectedReference} />
         </div>
       </div>
+
     </div>
   );
 }
