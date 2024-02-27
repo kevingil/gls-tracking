@@ -49,8 +49,8 @@ const Packages: React.FC<PackagesProps> = ({
                 setShipments(data);
                 setError(null);
             } catch (error) {
-                setError('Error fetching data');
-                console.error('Error fetching data: ', error);
+                setError('No shipments found for ' + selectedDay);
+                console.error('Error fetching data');
             }
         };
 
@@ -68,7 +68,7 @@ const Packages: React.FC<PackagesProps> = ({
     return (
         <div>
             {error ? (
-                <p>{error}</p>
+                <p className='font-semibold text-md stext-center p-4'>{error}</p>
             ) : (
                 <div>
                     {Object.entries(shipmentsByReference).map(([reference, shipments]) => (

@@ -56,6 +56,8 @@ export default function Home() {
   return (
     <div className="w-full h-full flex flex-col">
       <Search
+        selectedDay={selectedDay}
+        onDayChange={handleDayChange}
         onFilterChange={handleFilterChange}
       />
       <div className="flex flex-1 mx-auto  w-full  max-w-7xl overflow-y-scroll">

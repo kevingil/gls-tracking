@@ -81,6 +81,7 @@ export type ShipmentCharges = {
 
 export type Filter = {
     searchTerm: string;
+    reference: string;
     date: string;
     all: boolean;
     intransit: boolean;
@@ -120,6 +121,29 @@ async function fetchToken(h: string, p: string, u: string): Promise<Token> {
     }
 }
 
+
+async function track(h: string, acctnum: string, token: string, filter: Filter): Promise<TrackingResponse> {
+
+    try {
+        const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': token
+            }
+        });
+        if (!response.ok) {
+            console.log(response);
+            throw new Error('Failed to fetch shipment');
+        }
+        const data: TrackingResponse = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching shipment:', error);
+        throw new Error('Error fetching shipment');
+    }
+}
+
 async function trackByDate(h: string, acctnum: string, token: string, shipmentDate: string): Promise<TrackingResponse> {
     try {
         const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}&ShipDate=${shipmentDate}`, {
@@ -143,7 +167,7 @@ async function trackByDate(h: string, acctnum: string, token: string, shipmentDa
 
 async function trackByReference(h: string, acctnum: string, token: string, reference: string): Promise<TrackingResponse> {
     try {
-        const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}&ReferenceNumber=${reference}`, {
+        const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}&ReferenceNumber=${reference}&IncludeVPOD=true`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -151,10 +175,10 @@ async function trackByReference(h: string, acctnum: string, token: string, refer
             }
         });
         if (!response.ok) {
-            console.log(response);
             throw new Error('Failed to fetch shipment');
         }
         const data: TrackingResponse = await response.json();
+        console.log(data);
         return data;
     } catch (error) {
         console.error('Error fetching shipment:', error);
