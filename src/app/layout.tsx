@@ -7,7 +7,7 @@ require('dotenv').config();
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Shipment Dashboard"
+  title: "Package Dashboard"
 };
 
 export default function RootLayout({

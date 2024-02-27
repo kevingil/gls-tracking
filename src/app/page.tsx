@@ -1,8 +1,10 @@
 'use client';
+'use client';
 import React, { useState } from 'react';
 import Search from "./components/Search";
 import Packages from "../app/components/Packages";
 import ReferenceDetail from "../app/components/ReferenceDetail";
+import { Filter, TrackingResponse } from '../app/api/gls';
 
 function getPreviousBusinessDay() {
   const date = new Date();
@@ -20,7 +22,7 @@ function getPreviousBusinessDay() {
   const day = date.getDate();
   const year = date.getFullYear();
 
-  const formattedDate = `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+  const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
   return formattedDate;
 }
@@ -42,22 +44,33 @@ export default function Home() {
     setSelectedDay(newDate);
   };
 
+  const handleFilterChange = (filter: Filter) => {
+    console.log(filter);
+  };
+
+  // Shipments fetched from API
+  const shipments: TrackingResponse['ShipmentInfo'] = [];
+  // Error state if something goes wrong during fetching
+  const error: string | null = null;
+
   return (
     <div className="w-full h-full flex flex-col">
-      <Search/>
+      <Search
+        onFilterChange={handleFilterChange}
+      />
       <div className="flex flex-1 mx-auto  w-full  max-w-7xl overflow-y-scroll">
         <div className="w-[25rem] overflow-auto">
           <Packages
             selectedDay={selectedDay}
+            shipments={shipments}
+            error={error}
             onReferenceClick={handleReferenceClick}
-            onShipmentDateChange={handleDayChange}
           />
         </div>
         <div className="flex-1 w-full overflow-auto">
           <ReferenceDetail date={previousBusinessDay} reference={selectedReference} />
         </div>
       </div>
-
     </div>
   );
 }

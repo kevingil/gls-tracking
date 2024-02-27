@@ -1,27 +1,30 @@
 'use client';
-import { useEffect, useState, Fragment, useRef } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { fetchToken, trackByDate, TrackingResponse, Shipment } from '../api/gls';
+import { useEffect, useState, useRef } from 'react';
+import { TrackingResponse, Shipment, fetchToken, trackByDate } from '../api/gls';
 
 
 interface PackagesProps {
-    selectedDay: string | null; 
+    selectedDay: string | null;
+    shipments: TrackingResponse['ShipmentInfo'];
+    error: string | null;
     onReferenceClick: (reference: string) => void;
-    onShipmentDateChange: (newDate: string) => void;
 }
 
-const Packages = ({ selectedDay, onReferenceClick, onShipmentDateChange }: PackagesProps) => { 
+const Packages: React.FC<PackagesProps> = ({
+    selectedDay,
+    onReferenceClick,
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const shipmentDateInputRef = useRef<HTMLInputElement>(null);
     const [shipments, setShipments] = useState<TrackingResponse['ShipmentInfo']>([]);
     const [error, setError] = useState<string | null>(null);
-    let [isOpen, setIsOpen] = useState(false);
-    const shipmentDateInputRef = useRef<HTMLInputElement>(null);
 
     function closeModal() {
-        setIsOpen(false)
+        setIsOpen(false);
     }
 
     function openModal() {
-        setIsOpen(true)
+        setIsOpen(true);
     }
 
     useEffect(() => {
@@ -52,7 +55,7 @@ const Packages = ({ selectedDay, onReferenceClick, onShipmentDateChange }: Packa
         };
 
         fetchData();
-    }, [selectedDay, onShipmentDateChange]); 
+    }, [selectedDay]);
 
     const shipmentsByReference: { [key: string]: Shipment[] } = {};
     shipments.forEach(shipment => {
@@ -68,11 +71,12 @@ const Packages = ({ selectedDay, onReferenceClick, onShipmentDateChange }: Packa
                 <p>{error}</p>
             ) : (
                 <div>
-                   
                     {Object.entries(shipmentsByReference).map(([reference, shipments]) => (
-                        <div key={reference} 
+                        <div
+                            key={reference}
                             className="border border-gray-200 p-4"
-                            onClick={() => onReferenceClick(reference)}>
+                            onClick={() => onReferenceClick(reference)}
+                        >
                             <p className='font-semibold font-2xl'>ORDER# {reference}</p>
                             {shipments.map((shipment, index) => (
                                 <div key={index}>
@@ -86,8 +90,6 @@ const Packages = ({ selectedDay, onReferenceClick, onShipmentDateChange }: Packa
                                 </div>
                             ))}
                         </div>
-
-
                     ))}
                 </div>
             )}

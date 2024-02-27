@@ -1,7 +1,12 @@
-import { Transition, Dialog } from "@headlessui/react";
 import { Fragment, useState } from 'react';
+import { Filter } from '../api/gls';
+import { Dialog, Transition } from '@headlessui/react';
 
-function Search() {
+interface SearchProps {
+  onFilterChange: (filter: Filter) => void;
+}
+
+const Search: React.FC<SearchProps> = ({ onFilterChange }) => {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -13,19 +18,38 @@ function Search() {
     setIsOpen(true);
   };
 
+  const handleFilterClick = (filterName: keyof Filter) => {
+    const newFilter: Filter = {
+      searchTerm: '',
+      date: '',
+      all: false,
+      intransit: false,
+      late: false,
+      exception: false,
+      delivered: false,
+      [filterName]: true, 
+    };
+    onFilterChange(newFilter);
+  };
+
   return (
-    <div className="text-white bg-[#124280] p-4">
-      <div className='mx-auto flex justify-between w-full max-w-7xl gap-4'>
-        <p className="text-3xl">GLS Tracking</p>
-        <input type='search' className="bg-white rounded text-black flex-1" />
-        <button type='submit' className="bg-white rounded text-black p-2">Search</button>
+    <div className="text-white bg-[#124280]">
+      <div className='mx-auto flex justify-between w-full max-w-7xl gap-4 pt-4 px-4'>
+        <p className="text-3xl">Packages</p>
+        <input type='search' placeholder='Find package' className="pl-4 bg-white rounded-full text-black flex-1" />
+        <button type='submit' className="bg-white rounded-full text-black p-3">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+</svg>
+
+        </button>
       </div>
-      <div className='mx-auto flex justify-between w-full mt-4 max-w-7xl gap-4'>
+      <div className='mx-auto flex justify-between w-full mt-4 max-w-7xl gap-4 px-4'>
         <div>
           <p className=''>Date: </p>
           <button
             type="button"
-            className="rounded-md py-2 px-4 text-2xl font-medium hover:text-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+            className="py-2 px-4 text-2xl font-medium hover:text-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
             onClick={openModal}
           >
             {selectedDay}
@@ -74,7 +98,7 @@ function Search() {
                       <div className="mt-4">
                         <button
                           type="button"
-                          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                          className="inline-flex justify-center border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                         >
                           Find Shipments
                         </button>
@@ -86,12 +110,12 @@ function Search() {
             </Dialog>
           </Transition>
         </div>
-        <div className='flex gap-4 text-xl'>
-          <button className='bg-white rounded-md border-2 border-sky-600 hover:border-sky-300 text-black px-2 h-fit my-auto'>All</button>
-          <button className='bg-white rounded-md border-2 border-sky-600 hover:border-sky-300 text-black px-2 h-fit my-auto'>In Transit</button>
-          <button className='bg-white rounded-md border-2 border-sky-600 hover:border-sky-300 text-black px-2 h-fit my-auto'>Late</button>
-          <button className='bg-white rounded-md border-2 border-sky-600 hover:border-sky-300 text-black px-2 h-fit my-auto'>Exception</button>
-          <button className='bg-white rounded-md border-2 border-sky-600 hover:border-sky-300 text-black px-2 h-fit my-auto'>Delivered</button>
+        <div className='flex  text-xl'>
+          <button onClick={() => handleFilterClick('all')} className=' bg-blue-700/50 hover:border-sky-300 text-white px-4 h-full'>All</button>
+          <button onClick={() => handleFilterClick('intransit')} className='hover:border-sky-300 text-white px-4 h-full '>In Transit</button>
+          <button onClick={() => handleFilterClick('late')} className=' hover:border-sky-300 text-white px-4 h-full '>Late</button>
+          <button onClick={() => handleFilterClick('exception')} className='hover:border-sky-300 text-white px-4 h-full '>Exception</button>
+          <button onClick={() => handleFilterClick('delivered')} className='hover:border-sky-300 text-white px-4 h-full '>Delivered</button>
         </div>
       </div>
     </div>
