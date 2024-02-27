@@ -51,6 +51,7 @@ export type Shipment = {
     Delivery: DeliveryInfo;
     TransitNotes: TransitNote[];
     ShipmentCharges: ShipmentCharges;
+    Tag: string | null;
 };
 
 export type DeliveryInfo = {
@@ -155,7 +156,7 @@ async function trackByDate(h: string, acctnum: string, token: string, shipmentDa
         });
         if (!response.ok) {
             console.log(response);
-            throw new Error('Failed to fetch shipment');
+            throw new Error('Failed to parse shipment');
         }
         const data: TrackingResponse = await response.json();
         return data;
@@ -175,7 +176,7 @@ async function trackByReference(h: string, acctnum: string, token: string, refer
             }
         });
         if (!response.ok) {
-            throw new Error('Failed to fetch shipment');
+            throw new Error('Failed to parse shipment');
         }
         const data: TrackingResponse = await response.json();
         console.log(data);
@@ -185,6 +186,39 @@ async function trackByReference(h: string, acctnum: string, token: string, refer
         throw new Error('Error fetching shipment');
     }
 }
+
+async function getImagePOD(h: string, acctnum: string, token: string, trackingNumber: string): Promise<string | null> {
+    try {
+        const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}&TrackingNumber=${trackingNumber}&IncludeVPOD=true`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': token
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to parse image POD');
+        }
+        const data: TrackingResponse = await response.json();
+        return data.ShipmentInfo[0].PODImage;
+    } catch (error) {
+        console.error('Failed to fetch image POD:', error);
+        throw new Error('Failed to fetch image POD');
+    }
+}
+
+//Test
+async function tagShipment(box: Shipment): Promise<string> {
+    let tag = 'In Transit';
+    let today = new Date();
+    let shipdate = box.Delivery.ShipDate;
+    let expected = box.Delivery.ShipDate;
+    let scheduled = box.Delivery.ScheduledDeliveryDate;
+    let transitstatus = box.Delivery.TransitStatus;
+    
+    return tag;
+}
+
 
 
 export { fetchToken, trackByDate, trackByReference};

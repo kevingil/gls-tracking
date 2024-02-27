@@ -60,8 +60,8 @@ export default function Home() {
         onDayChange={handleDayChange}
         onFilterChange={handleFilterChange}
       />
-      <div className="flex flex-1 mx-auto  w-full  max-w-7xl overflow-y-scroll">
-        <div className="w-[25rem] overflow-auto">
+      <div className="flex flex-1 mx-auto  w-full max-w-7xl overflow-auto">
+        <div className="w-[25rem] overflow-y-scroll">
           <Packages
             selectedDay={selectedDay}
             shipments={shipments}
@@ -69,7 +69,7 @@ export default function Home() {
             onReferenceClick={handleReferenceClick}
           />
         </div>
-        <div className="flex-1 w-full overflow-auto">
+        <div className="flex-1 w-full overflow-y-scroll">
           <ReferenceDetail date={previousBusinessDay} reference={selectedReference} />
         </div>
       </div>
