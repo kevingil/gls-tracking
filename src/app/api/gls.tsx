@@ -51,8 +51,13 @@ export type Shipment = {
     Delivery: DeliveryInfo;
     TransitNotes: TransitNote[];
     ShipmentCharges: ShipmentCharges;
-    Tag: string | null;
+    Tag: Tag;
 };
+
+export type Tag = {
+    Name: string;
+    Color: string;
+}
 
 export type DeliveryInfo = {
     ShipDate: string;
@@ -62,7 +67,7 @@ export type DeliveryInfo = {
     TransitStatus: string;
     DeliveryTime: string;
     SignedBy: string;
-    Signature: string | null; 
+    Signature: string | null;
 };
 
 export type TransitNote = {
@@ -159,6 +164,9 @@ async function trackByDate(h: string, acctnum: string, token: string, shipmentDa
             throw new Error('Failed to parse shipment');
         }
         const data: TrackingResponse = await response.json();
+        for (const shipment of data.ShipmentInfo) {
+            shipment.Tag = await tagShipment(shipment);
+        }
         return data;
     } catch (error) {
         console.error('Error fetching shipment:', error);
@@ -208,14 +216,33 @@ async function getImagePOD(h: string, acctnum: string, token: string, trackingNu
 }
 
 //Test
-async function tagShipment(box: Shipment): Promise<string> {
-    let tag = 'In Transit';
+async function tagShipment(box: Shipment): Promise<Tag> {
+
+    let name = 'In Transit';
+    let color = 'text-blue-500';
+    let puState = box.PickupState;
+    let delState = box.DeliveryState;
     let today = new Date();
     let shipdate = box.Delivery.ShipDate;
     let expected = box.Delivery.ShipDate;
     let scheduled = box.Delivery.ScheduledDeliveryDate;
     let transitstatus = box.Delivery.TransitStatus;
-    
+
+    if (transitstatus === 'DELIVERED') {
+        name = transitstatus;
+        color = 'text-green-500';
+    } else if (transitstatus === 'IN TRANSIT'){
+        name = transitstatus;
+    } else {
+        name = 'Running Late'; 
+        color = 'text-red-500';
+    }
+
+    let tag = {
+        Name: name,
+        Color: color,
+    }
+
     return tag;
 }
 

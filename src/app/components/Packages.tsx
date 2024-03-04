@@ -40,10 +40,10 @@ const Packages: React.FC<PackagesProps> = ({
                 const token = tokenResponse.token;
 
                 // Fetch shipments
-                if (!selectedDay) { 
+                if (!selectedDay) {
                     return Error('No shipment date');
                 }
-                const shipmentResponse = await trackByDate(host, accountNumber, token, selectedDay); 
+                const shipmentResponse = await trackByDate(host, accountNumber, token, selectedDay);
                 const data = shipmentResponse.ShipmentInfo;
 
                 setShipments(data);
@@ -74,19 +74,21 @@ const Packages: React.FC<PackagesProps> = ({
                     {Object.entries(shipmentsByReference).map(([reference, shipments]) => (
                         <div
                             key={reference}
-                            className="border border-gray-200 p-4"
+                            className="border border-gray-200 p-4 cursor-pointer hover:bg-gray-100"
                             onClick={() => onReferenceClick(reference)}
                         >
-                            <p className='font-semibold font-2xl'>ORDER# {reference}</p>
+                            <p className='font-semibold font-2xl'>ORDER {reference}</p>
                             {shipments.map((shipment, index) => (
                                 <div key={index}>
                                     {index === 0 && (
                                         <>
                                             <p className='pb-2'>{shipment.ShipToCompany}</p>
-                                            <p className='text-slate-500 text-sm font-semibold'>Packages</p>
                                         </>
                                     )}
-                                    <p>{shipment.TrackingNumber}</p>
+                                    <div className='flex flex-col'>
+                                        <p className={`${shipment.Tag.Color} font-semibold capitalize p-0`}>{shipment.Tag.Name}</p>
+                                        <p>{shipment.TrackingNumber}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
