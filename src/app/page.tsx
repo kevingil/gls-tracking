@@ -30,6 +30,7 @@ function getPreviousBusinessDay() {
 export default function Home() {
   const [selectedReference, setSelectedReference] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<Filter>({ searchTerm: '', reference: '', shipdate: '', category: 'all' });
   const previousBusinessDay = getPreviousBusinessDay();
 
   if (!selectedDay) {
@@ -45,7 +46,7 @@ export default function Home() {
   };
 
   const handleFilterChange = (filter: Filter) => {
-    console.log(filter);
+    setSelectedFilter(filter);
   };
 
   // Shipments fetched from API
@@ -61,17 +62,15 @@ export default function Home() {
         onFilterChange={handleFilterChange}
       />
       <div className="flex flex-1 mx-auto  w-full max-w-7xl overflow-auto">
-        <div className="w-[25rem] overflow-y-scroll">
-          <Packages
-            selectedDay={selectedDay}
-            shipments={shipments}
-            error={error}
-            onReferenceClick={handleReferenceClick}
-          />
-        </div>
-        <div className="flex-1 w-full overflow-y-scroll">
-          <ReferenceDetail date={previousBusinessDay} reference={selectedReference} />
-        </div>
+        <Packages
+          selectedDay={selectedDay}
+          shipments={shipments}
+          error={error}
+          onReferenceClick={handleReferenceClick}
+          selectedFilter={selectedFilter} />
+        <ReferenceDetail 
+          date={previousBusinessDay}
+          reference={selectedReference} />
       </div>
     </div>
   );

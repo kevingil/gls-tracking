@@ -51,13 +51,9 @@ export type Shipment = {
     Delivery: DeliveryInfo;
     TransitNotes: TransitNote[];
     ShipmentCharges: ShipmentCharges;
+    //Not included in API response
     Tag: Tag;
 };
-
-export type Tag = {
-    Name: string;
-    Color: string;
-}
 
 export type DeliveryInfo = {
     ShipDate: string;
@@ -85,15 +81,17 @@ export type ShipmentCharges = {
     TotalCharge: number;
 };
 
+// Custom types
+export type Tag = {
+    Name: string;
+    Color: string;
+}
+
 export type Filter = {
     searchTerm: string;
     reference: string;
-    date: string;
-    all: boolean;
-    intransit: boolean;
-    late: boolean;
-    exception: boolean;
-    delivered: boolean;
+    shipdate: string;
+    category: string;
 }
 
 

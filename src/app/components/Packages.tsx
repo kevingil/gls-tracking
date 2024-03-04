@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
-import { TrackingResponse, Shipment, fetchToken, trackByDate } from '../api/gls';
+import { TrackingResponse, Shipment, fetchToken, trackByDate, Filter } from '../api/gls';
 
 
 interface PackagesProps {
     selectedDay: string | null;
+    selectedFilter: Filter;
     shipments: TrackingResponse['ShipmentInfo'];
     error: string | null;
     onReferenceClick: (reference: string) => void;
@@ -14,18 +15,9 @@ const Packages: React.FC<PackagesProps> = ({
     selectedDay,
     onReferenceClick,
 }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const shipmentDateInputRef = useRef<HTMLInputElement>(null);
     const [shipments, setShipments] = useState<TrackingResponse['ShipmentInfo']>([]);
     const [error, setError] = useState<string | null>(null);
 
-    function closeModal() {
-        setIsOpen(false);
-    }
-
-    function openModal() {
-        setIsOpen(true);
-    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,21 +49,22 @@ const Packages: React.FC<PackagesProps> = ({
         fetchData();
     }, [selectedDay]);
 
-    const shipmentsByReference: { [key: string]: Shipment[] } = {};
+    const filteredShipments: { [key: string]: Shipment[] } = {};
     shipments.forEach(shipment => {
-        if (!shipmentsByReference[shipment.ShipmentReference]) {
-            shipmentsByReference[shipment.ShipmentReference] = [];
+        if (!filteredShipments[shipment.ShipmentReference]) {
+            filteredShipments[shipment.ShipmentReference] = [];
         }
-        shipmentsByReference[shipment.ShipmentReference].push(shipment);
+        filteredShipments[shipment.ShipmentReference].push(shipment);
     });
 
     return (
-        <div>
+        <div className="w-[25rem] overflow-y-scroll">
+
             {error ? (
                 <p className='font-semibold text-md stext-center p-4'>{error}</p>
             ) : (
                 <div>
-                    {Object.entries(shipmentsByReference).map(([reference, shipments]) => (
+                    {Object.entries(filteredShipments).map(([reference, shipments]) => (
                         <div
                             key={reference}
                             className="border border-gray-200 p-4 cursor-pointer hover:bg-gray-100"
