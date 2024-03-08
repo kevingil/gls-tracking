@@ -27,17 +27,12 @@ const Search: React.FC<SearchProps> = ({ onFilterChange, onDayChange, selectedDa
     onDayChange(newDate);
   };
 
-  const handleFilterClick = (filterName: keyof Filter) => {
+  const handleFilterClick = (category: string) => {
     const newFilter: Filter = {
       searchTerm: '',
       reference: '',
-      date: '',
-      all: false,
-      intransit: false,
-      late: false,
-      exception: false,
-      delivered: false,
-      [filterName]: true,
+      shipdate: '',
+      category: category,
     };
     onFilterChange(newFilter);
   };
