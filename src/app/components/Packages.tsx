@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
 import { TrackingResponse, Shipment, fetchToken, trackByDate, Filter } from '../api/gls';
+import { useSearch } from '../context/SearchContext';
+
 
 
 interface PackagesProps {
@@ -17,6 +19,7 @@ const Packages: React.FC<PackagesProps> = ({
 }) => {
     const [shipments, setShipments] = useState<TrackingResponse['ShipmentInfo']>([]);
     const [error, setError] = useState<string | null>(null);
+    const { searchTerm } = useSearch();
 
 
     useEffect(() => {
@@ -49,34 +52,40 @@ const Packages: React.FC<PackagesProps> = ({
         fetchData();
     }, [selectedDay]);
 
-    const filteredShipments: { [key: string]: Shipment[] } = {};
-    shipments.forEach(shipment => {
-        if (!filteredShipments[shipment.ShipmentReference]) {
-            filteredShipments[shipment.ShipmentReference] = [];
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const filteredShipmentsArray = shipments.filter(shipment => 
+        shipment.ShipToCompany.toLowerCase().includes(lowerCaseSearchTerm) ||
+        shipment.DeliveryAddress1.toLowerCase().includes(lowerCaseSearchTerm) ||
+        shipment.ShipmentReference.toLowerCase().includes(lowerCaseSearchTerm)
+    );
+    
+    const structuredShipments: { [key: string]: Shipment[] } = {};
+    filteredShipmentsArray.forEach(shipment => {
+        const reference = shipment.ShipmentReference;
+        if (!structuredShipments[reference]) {
+            structuredShipments[reference] = [];
         }
-        filteredShipments[shipment.ShipmentReference].push(shipment);
+        structuredShipments[reference].push(shipment);
     });
+
 
     return (
         <div className="w-[25rem] overflow-y-scroll">
-
             {error ? (
-                <p className='font-semibold text-md stext-center p-4'>{error}</p>
+                <p className='font-semibold text-md text-center p-4'>{error}</p>
             ) : (
                 <div>
-                    {Object.entries(filteredShipments).map(([reference, shipments]) => (
+                    {Object.entries(structuredShipments).map(([reference, shipments]) => (
                         <div
                             key={reference}
                             className="border border-gray-200 p-4 cursor-pointer hover:bg-gray-100"
                             onClick={() => onReferenceClick(reference)}
                         >
-                            <p className='font-semibold font-2xl'>ORDER {reference}</p>
+                            <p className='font-semibold text-2xl'>ORDER {reference}</p>
                             {shipments.map((shipment, index) => (
                                 <div key={index}>
                                     {index === 0 && (
-                                        <>
-                                            <p className='pb-2'>{shipment.ShipToCompany}</p>
-                                        </>
+                                        <p className='pb-2'>{shipment.ShipToCompany}</p>
                                     )}
                                     <div className='flex flex-col'>
                                         <p className={`${shipment.Tag.Color} font-semibold capitalize p-0`}>{shipment.Tag.Name}</p>

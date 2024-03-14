@@ -5,6 +5,7 @@ import Search from "./components/Search";
 import Packages from "../app/components/Packages";
 import ReferenceDetail from "../app/components/ReferenceDetail";
 import { Filter, TrackingResponse } from '../app/api/gls';
+import { SearchProvider } from './context/SearchContext';
 
 function getPreviousBusinessDay() {
   const date = new Date();
@@ -55,6 +56,7 @@ export default function Home() {
   const error: string | null = null;
 
   return (
+    <SearchProvider>
     <div className="w-full h-full flex flex-col">
       <Search
         selectedDay={selectedDay}
@@ -73,5 +75,6 @@ export default function Home() {
           reference={selectedReference} />
       </div>
     </div>
+    </SearchProvider>
   );
 }

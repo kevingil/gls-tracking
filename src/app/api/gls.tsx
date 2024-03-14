@@ -127,9 +127,12 @@ async function fetchToken(h: string, p: string, u: string): Promise<Token> {
 
 
 async function track(h: string, acctnum: string, token: string, filter: Filter): Promise<TrackingResponse> {
-
     try {
-        const response = await fetch(`https://${h}/TrackShipment?AccountNumber=${acctnum}`, {
+        let queryString = `https://${h}/TrackShipment?AccountNumber=${acctnum}`;
+        if (filter.shipdate) queryString += `&ShipDate=${encodeURIComponent(filter.shipdate)}`;
+        if (filter.reference) queryString += `&ReferenceNumber=${encodeURIComponent(filter.reference)}`;
+
+        const response = await fetch(queryString, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
