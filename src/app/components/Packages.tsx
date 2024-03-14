@@ -88,7 +88,9 @@ const Packages: React.FC<PackagesProps> = ({
                                         <p className='pb-2'>{shipment.ShipToCompany}</p>
                                     )}
                                     <div className='flex flex-col'>
-                                        <p className={`${shipment.Tag.Color} font-semibold capitalize p-0`}>{shipment.Tag.Name}</p>
+                                        <div className='pb-1'>
+                                            <span className={`${shipment.Tag.Color} ${shipment.Tag.Background} text-xs flex-wrap font-semibold capitalize rounded px-2 py-0.5`}>{shipment.Tag.Name}</span>
+                                        </div>
                                         <p>{shipment.TrackingNumber}</p>
                                     </div>
                                 </div>

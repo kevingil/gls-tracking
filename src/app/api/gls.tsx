@@ -85,6 +85,7 @@ export type ShipmentCharges = {
 export type Tag = {
     Name: string;
     Color: string;
+    Background: string;
 }
 
 export type Filter = {
@@ -220,7 +221,8 @@ async function getImagePOD(h: string, acctnum: string, token: string, trackingNu
 async function tagShipment(box: Shipment): Promise<Tag> {
 
     let name = 'In Transit';
-    let color = 'text-blue-500';
+    let color = 'text-blue-600';
+    let background = 'bg-blue-300';
     let puState = box.PickupState;
     let delState = box.DeliveryState;
     let today = new Date();
@@ -231,17 +233,22 @@ async function tagShipment(box: Shipment): Promise<Tag> {
 
     if (transitstatus === 'DELIVERED') {
         name = transitstatus;
-        color = 'text-green-500';
+        color = 'text-green-700';
+        background = 'bg-green-200';
     } else if (transitstatus === 'IN TRANSIT'){
-        name = transitstatus;
+        name = "In Transit";
+        color = 'text-blue-700';
+        background = 'bg-blue-200';
     } else {
         name = 'Running Late'; 
-        color = 'text-red-500';
+        color = 'text-rose-700';
+        background = 'bg-rose-200';
     }
 
     let tag = {
         Name: name,
         Color: color,
+        Background: background
     }
 
     return tag;
