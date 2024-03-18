@@ -4,21 +4,23 @@ import "./styles/main.css";
 
 require('dotenv').config();
 
-const inter = Inter({ subsets: ["latin"] });
+// Value is read in CSS
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  style: ['normal'], 
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "Package Dashboard"
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
       <body>
-      {children}
+        {children}
       </body>
     </html>
   );

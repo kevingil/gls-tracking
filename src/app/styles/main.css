@@ -23,6 +23,7 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'Inter', sans-serif;
 }
 
 footer {
@@ -38,9 +39,10 @@ footer {
 input[type="date"] {
     position:relative;
     font-family:monospace;
+    font-size: 0.8rem;
     border:1px solid #8292a2;
     color: rgb(0, 0, 0);
-    padding: 0.5rem;
+    padding: 0.25rem;
     border-radius:0.25rem;
     background:
       rgb(255, 255, 255);
@@ -105,4 +107,22 @@ nav.account-nav > div > div {
     .text-balance {
       text-wrap: balance;
     }
+  }
+
+
+  .filters {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .filters button {
+    padding: 0.3rem 1rem;
+    margin: auto;
+    font-size: 0.8rem;
+    border: 1px solid #e2e2e2;
+    border-radius: 2rem;
+  }
+
+  .filters button:hover {
+    background: #92b5d82d;
   }
