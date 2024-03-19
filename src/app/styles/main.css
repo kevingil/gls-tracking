@@ -116,13 +116,18 @@ nav.account-nav > div > div {
   }
 
   .filters button {
+    background-color: #ffffff3d;
     padding: 0.3rem 1rem;
     margin: auto;
     font-size: 0.8rem;
-    border: 1px solid #e2e2e2;
+    border: 3px solid #ffffff00;
     border-radius: 2rem;
   }
 
   .filters button:hover {
     background: #92b5d82d;
   }
+
+  .selected-filter {
+    border: 3px solid #ffffff !important;
+  } 

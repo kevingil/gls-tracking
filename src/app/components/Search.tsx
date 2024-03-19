@@ -3,14 +3,12 @@ import { Filter } from '../api/gls';
 import { useSearch } from '../context/SearchContext';
 
 interface SearchProps {
-  onFilterChange: (filter: Filter) => void;
   onDayChange: (day: string) => void;
   selectedDay: string | null;
 }
 
-const Search: React.FC<SearchProps> = ({ onFilterChange, onDayChange, selectedDay }) => {
-  const { searchTerm, setSearchTerm } = useSearch();
-
+const Search: React.FC<SearchProps> = ({ onDayChange, selectedDay }) => {
+  const { searchTerm, setSearchTerm, filter, setFilter } = useSearch();
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -26,16 +24,6 @@ const Search: React.FC<SearchProps> = ({ onFilterChange, onDayChange, selectedDa
     closeModal();
     console.log(newDate);
     onDayChange(newDate);
-  };
-
-  const handleFilterClick = (category: string) => {
-    const newFilter: Filter = {
-      searchTerm: '',
-      reference: '',
-      shipdate: '',
-      category: category,
-    };
-    onFilterChange(newFilter);
   };
 
   return (
@@ -68,11 +56,11 @@ const Search: React.FC<SearchProps> = ({ onFilterChange, onDayChange, selectedDa
               onChange={handleDaySelection} />
           </div>
           <div className='flex filters'>
-          <button onClick={() => handleFilterClick('all')} className=''>All</button>
-          <button onClick={() => handleFilterClick('intransit')} className='whitespace-nowrap'>In Transit</button>
-          <button onClick={() => handleFilterClick('late')} className=''>Late</button>
-          <button onClick={() => handleFilterClick('exception')} className=''>Exception</button>
-          <button onClick={() => handleFilterClick('delivered')} className=''>Delivered</button>
+          <button onClick={() => setFilter('all')} className={filter === 'all' ? 'selected-filter' : ''}>All</button>
+          <button onClick={() => setFilter('intransit')} className={filter === 'intransit' ? 'selected-filter' : ''} style={{ whiteSpace: 'nowrap' }}>In Transit</button>
+          <button onClick={() => setFilter('late')} className={filter === 'late' ? 'selected-filter' : ''}>Late</button>
+          <button onClick={() => setFilter('exception')} className={filter === 'exception' ? 'selected-filter' : ''}>Exception</button>
+          <button onClick={() => setFilter('delivered')} className={filter === 'delivered' ? 'selected-filter' : ''}>Delivered</button>
           </div>
         </div>
 

@@ -31,7 +31,6 @@ function getPreviousBusinessDay() {
 export default function Home() {
   const [selectedReference, setSelectedReference] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState<Filter>({ searchTerm: '', reference: '', shipdate: '', category: 'all' });
   const previousBusinessDay = getPreviousBusinessDay();
 
   if (!selectedDay) {
@@ -46,9 +45,6 @@ export default function Home() {
     setSelectedDay(newDate);
   };
 
-  const handleFilterChange = (filter: Filter) => {
-    setSelectedFilter(filter);
-  };
 
   // Shipments fetched from API
   const shipments: TrackingResponse['ShipmentInfo'] = [];
@@ -61,15 +57,13 @@ export default function Home() {
       <Search
         selectedDay={selectedDay}
         onDayChange={handleDayChange}
-        onFilterChange={handleFilterChange}
       />
       <div className="flex flex-1 mx-auto  w-full max-w-7xl overflow-auto">
         <Packages
           selectedDay={selectedDay}
           shipments={shipments}
           error={error}
-          onReferenceClick={handleReferenceClick}
-          selectedFilter={selectedFilter} />
+          onReferenceClick={handleReferenceClick} />
         <ReferenceDetail 
           date={previousBusinessDay}
           reference={selectedReference} />

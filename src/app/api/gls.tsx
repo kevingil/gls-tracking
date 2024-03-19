@@ -86,6 +86,7 @@ export type Tag = {
     Name: string;
     Color: string;
     Background: string;
+    Category: string | null;
 }
 
 export type Filter = {
@@ -217,7 +218,7 @@ async function getImagePOD(h: string, acctnum: string, token: string, trackingNu
     }
 }
 
-//Test
+//TODO improve package tagging to catch exceptions early
 async function tagShipment(box: Shipment): Promise<Tag> {
 
     let name = 'In Transit';
@@ -230,25 +231,30 @@ async function tagShipment(box: Shipment): Promise<Tag> {
     let expected = box.Delivery.ShipDate;
     let scheduled = box.Delivery.ScheduledDeliveryDate;
     let transitstatus = box.Delivery.TransitStatus;
+    let category = '';
 
     if (transitstatus === 'DELIVERED') {
         name = transitstatus;
         color = 'text-green-700';
         background = 'bg-green-200';
+        category = 'delivered';
     } else if (transitstatus === 'IN TRANSIT'){
         name = "In Transit";
         color = 'text-blue-700';
         background = 'bg-blue-200';
+        category = 'intransit';
     } else {
         name = 'Running Late'; 
         color = 'text-rose-700';
         background = 'bg-rose-200';
+        category = 'late';
     }
 
     let tag = {
         Name: name,
         Color: color,
-        Background: background
+        Background: background,
+        Category: category
     }
 
     return tag;

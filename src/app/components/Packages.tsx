@@ -7,7 +7,6 @@ import { useSearch } from '../context/SearchContext';
 
 interface PackagesProps {
     selectedDay: string | null;
-    selectedFilter: Filter;
     shipments: TrackingResponse['ShipmentInfo'];
     error: string | null;
     onReferenceClick: (reference: string) => void;
@@ -19,7 +18,7 @@ const Packages: React.FC<PackagesProps> = ({
 }) => {
     const [shipments, setShipments] = useState<TrackingResponse['ShipmentInfo']>([]);
     const [error, setError] = useState<string | null>(null);
-    const { searchTerm } = useSearch();
+    const { searchTerm, filter } = useSearch();
 
 
     useEffect(() => {
@@ -57,6 +56,8 @@ const Packages: React.FC<PackagesProps> = ({
         shipment.ShipToCompany.toLowerCase().includes(lowerCaseSearchTerm) ||
         shipment.DeliveryAddress1.toLowerCase().includes(lowerCaseSearchTerm) ||
         shipment.ShipmentReference.toLowerCase().includes(lowerCaseSearchTerm)
+    ).filter(shipment => 
+        filter === "all" || shipment.Tag.Category === filter
     );
     
     const structuredShipments: { [key: string]: Shipment[] } = {};
@@ -67,6 +68,7 @@ const Packages: React.FC<PackagesProps> = ({
         }
         structuredShipments[reference].push(shipment);
     });
+
 
 
     return (
