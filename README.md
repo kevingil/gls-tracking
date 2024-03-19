@@ -13,11 +13,13 @@ Find by date, grouped by reference
 
 ### Develop
 
-You will need your GLS API credentials
+You will need your GLS API credentials.
 
 TODO
 
 - prompt user to login
+- group pkgs with no reference
+- improve tagging, catch exceptions early 
 
 
 

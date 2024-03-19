@@ -123,7 +123,7 @@ async function fetchToken(h: string, p: string, u: string): Promise<Token> {
             expirationTime: expirationTime
         };
     } catch (error) {
-        throw new Error('Could not fetch token');
+        throw new Error('Check API keys in your .env');
     }
 }
 

@@ -38,7 +38,7 @@ const Search: React.FC<SearchProps> = ({ onDayChange, selectedDay }) => {
           <input
             type='search'
             placeholder='Find by name, reference, city, etc'
-            className="pl-4 p-2 m-2 bg-white rounded-full text-black flex-1"
+            className="pl-4 p-2 m-2 bg-white rounded-full text-sm text-black flex-1"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)} />
         </div>
