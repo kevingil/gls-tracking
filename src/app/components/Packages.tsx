@@ -81,16 +81,21 @@ const Packages: React.FC<PackagesProps> = ({
                         <div
                             key={reference}
                             className="border border-gray-200 p-4 cursor-pointer hover:bg-gray-100"
-                            onClick={() => onReferenceClick(reference)}
-                        >
-                            <p className='font-semibold text-2xl'>ORDER {reference}</p>
+                            onClick={() => onReferenceClick(reference)}>
+                            <p className='font-semibold text-xl'>
+                               {reference === '' ? 'OTHER' : 'ORDER '+ reference } </p>
                             {shipments.map((shipment, index) => (
                                 <div key={index}>
-                                    {index === 0 && (
-                                        <p className='pb-2'>{shipment.ShipToCompany}</p>
+                                    {index === 0  && (
+                                        <p className='pb-2'>{shipment.ShipmentReference === '' ? '' : shipment.ShipToCompany}</p>
                                     )}
                                     <div className='flex flex-col'>
                                         <div className='pb-1'>
+                                            {
+                                                shipment.ShipmentReference === '' ?
+                                                     <span className={`text-sm flex-wrap font-semibold capitalize rounded py-0.5`}>{shipment.ShipToCompany}</span>
+                                                : ''
+                                            }
                                             <span className={`${shipment.Tag.Color} ${shipment.Tag.Background} text-xs flex-wrap font-semibold capitalize rounded px-2 py-0.5`}>{shipment.Tag.Name}</span>
                                         </div>
                                         <p>{shipment.TrackingNumber}</p>
