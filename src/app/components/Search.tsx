@@ -22,7 +22,6 @@ const Search: React.FC<SearchProps> = ({ onDayChange, selectedDay }) => {
   const handleDaySelection = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newDate = event.target.value;
     closeModal();
-    console.log(newDate);
     onDayChange(newDate);
   };
 
