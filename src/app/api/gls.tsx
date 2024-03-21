@@ -142,7 +142,6 @@ async function track(h: string, acctnum: string, token: string, filter: Filter):
             }
         });
         if (!response.ok) {
-            console.log(response);
             throw new Error('Failed to fetch shipment');
         }
         const data: TrackingResponse = await response.json();
@@ -163,7 +162,6 @@ async function trackByDate(h: string, acctnum: string, token: string, shipmentDa
             }
         });
         if (!response.ok) {
-            console.log(response);
             throw new Error('Failed to parse shipment');
         }
         const data: TrackingResponse = await response.json();
@@ -190,7 +188,6 @@ async function trackByReference(h: string, acctnum: string, token: string, refer
             throw new Error('Failed to parse shipment');
         }
         const data: TrackingResponse = await response.json();
-        console.log(data);
         return data;
     } catch (error) {
         console.error('Error fetching shipment:', error);
